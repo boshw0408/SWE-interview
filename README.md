@@ -10,5 +10,7 @@ Backend
 
 Run
 
-5. In the backend directory - npm start
-6. In the frontend directory - npm start
+5. In the backend directory
+6. npm start
+7. In the frontend directory
+8. npm start
