@@ -2,11 +2,13 @@ const express = require('express');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.use(express.json());
 
 //implement the CORS config
+const cors = require('cors');
+app.use(cors());
 
 //products array
 let products = [
@@ -25,12 +27,22 @@ const fetchImageUrl = () => {
 
 //implement the get api for getting products
 app.get('/api/products', (req, res) => {
-
+  const withImages = products.map(p => ({
+    ...p,
+    imageUrl: fetchImageUrl()
+  }));
+  res.json(withImages);
 });
 
 //implement the delete api for deleting a product by Id
 app.delete('/api/products/:id', (req, res) => {
-    
+  const id = parseInt(req.params.id, 10);
+  const idx = products.findIndex(p => p.id === id);
+  if (idx === -1) {
+    return res.status(404).json({ error: 'Product not found' });
+  }
+  products.splice(idx, 1);
+  res.status(204).end();
 });
 
 app.listen(PORT, () => {
